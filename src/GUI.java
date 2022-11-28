@@ -1,12 +1,17 @@
-import java.awt.Container;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.LineBorder;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.awt.*; 
 
 public class GUI extends JFrame implements ActionListener{
 
@@ -17,6 +22,10 @@ public class GUI extends JFrame implements ActionListener{
     JMenuItem plotData;
     JMenu file;
     JMenuItem about;
+    boolean flag = false;
+    List<Student> studentRoster = new ArrayList<>();
+    JPanel panel = new JPanel();
+    JTable table = new JTable();
 
     public GUI(){
         loadGUI();
@@ -51,6 +60,34 @@ public class GUI extends JFrame implements ActionListener{
         this.setJMenuBar(menuBar);
 
         this.setVisible(true);    
+
+                // Action listener for adding Roster data
+        loadRoster.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                Roster roster = new Roster();
+                studentRoster = roster.loadRosterData(table);
+                if(studentRoster != null) {
+                    flag = true;
+                    panel.removeAll();
+                    panel.setLayout(new BorderLayout());
+                    Dimension screen = new Dimension();
+                    screen.setSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth(), Toolkit.getDefaultToolkit().getScreenSize().getHeight());
+                    panel.setSize(screen);
+                    panel.setBorder(LineBorder.createBlackLineBorder());   
+                    add(panel);
+                    JScrollPane sp = roster.visualizeRoster(studentRoster);
+                    panel.add(sp);
+                    panel.updateUI();
+                }
+                else {
+                    panel.removeAll(); 
+                    panel.updateUI();
+                }
+            }
+        });
 
     }
 
