@@ -39,6 +39,7 @@ public class GUI extends JFrame implements ActionListener{
         setResizable(true);
 
         loadRoster = new JMenuItem("Load a Roster");
+        loadRoster.addActionListener(this);
         addAttendance = new JMenuItem("Add Attendance");
         saveRoster = new JMenuItem("Save");
         plotData = new JMenuItem("Plot Data");
@@ -60,41 +61,35 @@ public class GUI extends JFrame implements ActionListener{
         this.setJMenuBar(menuBar);
 
         this.setVisible(true);    
-
-                // Action listener for adding Roster data
-        loadRoster.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                Roster roster = new Roster();
-                studentRoster = roster.loadRosterData(table);
-                if(studentRoster != null) {
-                    flag = true;
-                    panel.removeAll();
-                    panel.setLayout(new BorderLayout());
-                    Dimension screen = new Dimension();
-                    screen.setSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth(), Toolkit.getDefaultToolkit().getScreenSize().getHeight());
-                    panel.setSize(screen);
-                    panel.setBorder(LineBorder.createBlackLineBorder());   
-                    add(panel);
-                    JScrollPane sp = roster.visualizeRoster(studentRoster);
-                    panel.add(sp);
-                    panel.updateUI();
-                }
-                else {
-                    panel.removeAll(); 
-                    panel.updateUI();
-                }
-            }
-        });
-
     }
+        
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == about) {
             Viewer.aboutDialogBox();
+        }
+        // Action listener for adding Roster data
+        else if(e.getSource() == loadRoster) {
+            Roster roster = new Roster();
+            studentRoster = roster.loadRosterData(table);
+            if(studentRoster != null) {
+                flag = true;
+                panel.removeAll();
+                panel.setLayout(new BorderLayout());
+                Dimension screen = new Dimension();
+                screen.setSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth(), Toolkit.getDefaultToolkit().getScreenSize().getHeight());
+                panel.setSize(screen);
+                panel.setBorder(LineBorder.createBlackLineBorder());   
+                add(panel);
+                JScrollPane sp = roster.visualizeRoster(studentRoster);
+                panel.add(sp);
+                panel.updateUI();
+            }
+            else {
+                panel.removeAll(); 
+                panel.updateUI();
+            }
         }
     }
 
