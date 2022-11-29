@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.awt.*;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class GUI extends JFrame implements ActionListener{
     List<Student> studentRoster = new ArrayList<>();
     JPanel panel = new JPanel();
     JTable table = new JTable();
-    Map<String, Integer> columnMap = new HashMap<>();
+    LinkedHashMap<String, Integer> columnMap = new LinkedHashMap<>();
     Attendance attendance = new Attendance(null);
 
     public GUI(){
