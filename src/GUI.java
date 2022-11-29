@@ -9,6 +9,7 @@ import javax.swing.border.LineBorder;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.*; 
@@ -22,7 +23,7 @@ public class GUI extends JFrame implements ActionListener{
     JMenuItem plotData;
     JMenu file;
     JMenuItem about;
-    boolean flag = false;
+    boolean rosterAdded = false;
     List<Student> studentRoster = new ArrayList<>();
     JPanel panel = new JPanel();
     JTable table = new JTable();
@@ -41,6 +42,7 @@ public class GUI extends JFrame implements ActionListener{
         loadRoster = new JMenuItem("Load a Roster");
         loadRoster.addActionListener(this);
         addAttendance = new JMenuItem("Add Attendance");
+        addAttendance.addActionListener(this);
         saveRoster = new JMenuItem("Save");
         plotData = new JMenuItem("Plot Data");
 
@@ -74,7 +76,7 @@ public class GUI extends JFrame implements ActionListener{
             Roster roster = new Roster();
             studentRoster = roster.loadRosterData(table);
             if(studentRoster != null) {
-                flag = true;
+                rosterAdded = true;
                 panel.removeAll();
                 panel.setLayout(new BorderLayout());
                 Dimension screen = new Dimension();
@@ -90,7 +92,14 @@ public class GUI extends JFrame implements ActionListener{
                 panel.removeAll(); 
                 panel.updateUI();
             }
+        } // Action listener for adding attendance data
+        else if(e.getSource() == addAttendance && rosterAdded) {
+            Attendance attendance = new Attendance();
+            try {
+                attendance.loadAttendanceData();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
-
 }
