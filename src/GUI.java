@@ -94,7 +94,7 @@ public class GUI extends JFrame implements ActionListener{
             }
         } // Action listener for adding attendance data
         else if(e.getSource() == addAttendance && rosterAdded) {
-            Attendance attendance = new Attendance();
+            Attendance attendance = new Attendance(studentRoster);
             try {
                 attendance.loadAttendanceData();
             } catch (IOException ex) {

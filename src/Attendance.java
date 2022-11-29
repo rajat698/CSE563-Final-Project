@@ -3,12 +3,25 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Attendance extends JFileChooser {
     private JFileChooser fileChooser = new JFileChooser();
-    private Map<String, Map<String, Integer>> map = new HashMap<>();
+    private Map<String, Map<Student, Integer>> dateMap;
+    private Map<String, Student> studentMap;
+    private static Map<String, List<String>> asuriteMissingInRoster;
+
+    public Attendance(List<Student> students) {
+        asuriteMissingInRoster = new HashMap<>();
+        if (students != null)
+            studentMap = convertListToMap(students);
+
+        dateMap =  new HashMap<>();
+    }
+
     public void loadAttendanceData() throws IOException {
         int result = fileChooser.showOpenDialog(getParent());
 
@@ -28,9 +41,17 @@ public class Attendance extends JFileChooser {
             if (date == null)
                 throw new IOException("Date format invalid for file: "+fileName);
 
-            map.put(date, loadFileData(filePath, fileName));
-        }
+            dateMap.put(date, loadFileData(filePath, date));
 
+            System.out.println(dateMap);
+        }
+    }
+
+    private Map<String, Student> convertListToMap(List<Student> students) {
+        Map<String, Student> studentMap = new HashMap<>();
+        for (Student student : students)
+            studentMap.put(student.getASURITE(), student);
+        return studentMap;
     }
 
     private String convertToDateFmt(String unformattedDate) {
@@ -47,20 +68,26 @@ public class Attendance extends JFileChooser {
         return month+"/"+day+"/"+year;
     }
 
-    private Map<String, Integer> loadFileData(String filePathString, String fileName) throws IOException {
+    private Map<Student, Integer> loadFileData(String filePathString, String date) {
         String line = "";
         String delimiter = ",";
+        Map<Student, Integer> attendanceMap = new HashMap<>();
 
-        Map<String, Integer> attendanceMap = new HashMap<>();
         try  {
             BufferedReader br = new BufferedReader(new FileReader(filePathString));
             while ((line = br.readLine()) != null) {
                 String[] attendanceData= line.split(delimiter);
                 String asurite = attendanceData[0];
                 int time = Integer.parseInt(attendanceData[1]);
-                attendanceMap.put(asurite, attendanceMap.getOrDefault(asurite, 0) + time);
-            }
 
+                if (!studentMap.containsKey(asurite)) {
+                    asuriteMissingInRoster.putIfAbsent(date, new ArrayList<>());
+                    asuriteMissingInRoster.get(date).add(asurite);
+                } else {
+                    Student studentObj = studentMap.get(asurite);
+                    attendanceMap.put(studentObj, attendanceMap.getOrDefault(studentObj, 0) + time);
+                }
+            }
             br.close();
         } catch (IOException e)  {
             e.printStackTrace();
