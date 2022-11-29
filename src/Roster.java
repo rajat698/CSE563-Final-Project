@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JFileChooser;
@@ -25,7 +26,7 @@ public class Roster extends JFileChooser{
 
             File selectedFile = fileChooser.getSelectedFile();
             String fileName = selectedFile.getName();
-            String filePath = selectedFile.getAbsolutePath().toString();
+            String filePath = selectedFile.getAbsolutePath();
 
             if(fileName.endsWith(".csv")) {
                 return loadFileData(filePath);
@@ -59,23 +60,26 @@ public class Roster extends JFileChooser{
         return students;
     }
 
-    public JScrollPane visualizeRoster(List<Student> students) {
+    public JScrollPane visualizeRoster(List<Student> students, int numCol, String[] columnNames,
+                                       Map<String, Integer> columnMap) {
+        String[][] data = new String[students.size()][numCol];
 
-        String[][] data = new String[students.size()][4];
+        for(int i= 0;i < students.size(); ++i) {
+            String[] info = new String[numCol];
+            Student studentObj = students.get(i);
+            info[0] = studentObj.getID();
+            info[1] = studentObj.getFirstName();
+            info[2] = studentObj.getLastName();
+            info[3] = studentObj.getASURITE();
 
-        for(int i=0;i<students.size();i++) {
-            String[] info = new String[4];
-            info[0] = students.get(i).getID();
-            info[1] = students.get(i).getFirstName();
-            info[2] = students.get(i).getLastName();
-            info[3] = students.get(i).getASURITE();
+            for (Map.Entry<String, Integer> entry : studentObj.getAttendance().entrySet()) {
+                int columnNum = columnMap.get(entry.getKey());
+                info[columnNum] = String.valueOf(entry.getValue());
+            }
 
             data[i] = info;
         }
-     
-        // Column Names
-        String[] columnNames = { "ID", "First Name", "Last Name","ASURITE"};
-     
+
         table = new JTable(data, columnNames);
         table.setBounds(30, 40, 200, 300);
      

@@ -10,23 +10,25 @@ import java.util.Map;
 
 public class Attendance extends JFileChooser {
     private JFileChooser fileChooser = new JFileChooser();
-    private Map<String, Map<Student, Integer>> dateMap;
     private Map<String, Student> studentMap;
     private static Map<String, List<String>> asuriteMissingInRoster;
+    private static int columnNum;
 
     public Attendance(List<Student> students) {
         asuriteMissingInRoster = new HashMap<>();
         if (students != null)
             studentMap = convertListToMap(students);
-
-        dateMap =  new HashMap<>();
+        columnNum = 4;
     }
 
-    public void loadAttendanceData() throws IOException {
+    /**
+     *
+     * @return list of all the dates on which attendance was taken
+     * @throws IOException
+     */
+    public void loadAttendanceData(Map<String, Integer> datesMap) throws IOException {
         int result = fileChooser.showOpenDialog(getParent());
-
         if (result == JFileChooser.APPROVE_OPTION) {
-
             File selectedFile = fileChooser.getSelectedFile();
             String fileName = selectedFile.getName();
             String filePath = selectedFile.getAbsolutePath();
@@ -41,9 +43,12 @@ public class Attendance extends JFileChooser {
             if (date == null)
                 throw new IOException("Date format invalid for file: "+fileName);
 
-            dateMap.put(date, loadFileData(filePath, date));
+            if (!datesMap.containsKey(date)) {
+                datesMap.put(date, columnNum);
+                columnNum++;
+            }
 
-            System.out.println(dateMap);
+            loadFileData(filePath, date);
         }
     }
 
@@ -58,7 +63,7 @@ public class Attendance extends JFileChooser {
         if (unformattedDate.length() != 8)
             return null;
 
-        int year = Integer.parseInt(String.valueOf(unformattedDate.substring(0, 4)));
+        int year = Integer.parseInt(unformattedDate.substring(0, 4));
         int month = Integer.parseInt(unformattedDate.substring(4, 6));
         int day = Integer.parseInt(unformattedDate.substring(6, 8));
 
@@ -68,10 +73,9 @@ public class Attendance extends JFileChooser {
         return month+"/"+day+"/"+year;
     }
 
-    private Map<Student, Integer> loadFileData(String filePathString, String date) {
+    private void loadFileData(String filePathString, String date) {
         String line = "";
         String delimiter = ",";
-        Map<Student, Integer> attendanceMap = new HashMap<>();
 
         try  {
             BufferedReader br = new BufferedReader(new FileReader(filePathString));
@@ -85,14 +89,15 @@ public class Attendance extends JFileChooser {
                     asuriteMissingInRoster.get(date).add(asurite);
                 } else {
                     Student studentObj = studentMap.get(asurite);
-                    attendanceMap.put(studentObj, attendanceMap.getOrDefault(studentObj, 0) + time);
+                    Map<String, Integer> dateWiseAttendance = studentObj.getAttendance();
+                    dateWiseAttendance.put(date, dateWiseAttendance.getOrDefault(date, 0) + time);
+                    studentObj.setAttendance(dateWiseAttendance);
                 }
             }
+
             br.close();
         } catch (IOException e)  {
             e.printStackTrace();
         }
-
-        return attendanceMap;
     }
 }

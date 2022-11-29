@@ -11,8 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.awt.*; 
+import java.awt.*;
+import java.util.Map;
 
 public class GUI extends JFrame implements ActionListener{
 
@@ -27,6 +29,8 @@ public class GUI extends JFrame implements ActionListener{
     List<Student> studentRoster = new ArrayList<>();
     JPanel panel = new JPanel();
     JTable table = new JTable();
+    Map<String, Integer> columnMap = new HashMap<>();
+    Attendance attendance = new Attendance(null);
 
     public GUI(){
         loadGUI();
@@ -84,7 +88,11 @@ public class GUI extends JFrame implements ActionListener{
                 panel.setSize(screen);
                 panel.setBorder(LineBorder.createBlackLineBorder());   
                 add(panel);
-                JScrollPane sp = roster.visualizeRoster(studentRoster);
+
+                String[] columnNames = { "ID", "First Name", "Last Name","ASURITE"};
+                JScrollPane sp = roster.visualizeRoster(studentRoster, columnNames.length, columnNames, columnMap);
+                attendance = new Attendance(studentRoster);
+
                 panel.add(sp);
                 panel.updateUI();
             }
@@ -94,9 +102,30 @@ public class GUI extends JFrame implements ActionListener{
             }
         } // Action listener for adding attendance data
         else if(e.getSource() == addAttendance && rosterAdded) {
-            Attendance attendance = new Attendance(studentRoster);
             try {
-                attendance.loadAttendanceData();
+                attendance.loadAttendanceData(columnMap);
+
+                panel.removeAll();
+                panel.setLayout(new BorderLayout());
+                Dimension screen = new Dimension();
+                screen.setSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth(), Toolkit.getDefaultToolkit().getScreenSize().getHeight());
+                panel.setSize(screen);
+                panel.setBorder(LineBorder.createBlackLineBorder());
+                add(panel);
+
+                String[] columnNames = new String[4 + columnMap.size()];
+                columnNames[0] = "ID";
+                columnNames[1] = "First Name";
+                columnNames[2] = "First Name";
+                columnNames[3] = "ASURITE";
+                int i = 4;
+                for (String str : columnMap.keySet())
+                    columnNames[i++] = str;
+
+                Roster roster = new Roster();
+                JScrollPane sp = roster.visualizeRoster(studentRoster, columnNames.length, columnNames, columnMap);
+                panel.add(sp);
+                panel.updateUI();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
