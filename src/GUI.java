@@ -135,12 +135,8 @@ public class GUI extends JFrame implements ActionListener{
                 displayData = data;
                 String[] h = roster.getHeaders();
                 headers = h;
-                // System.out.println("DATA IS ::::"+data);
                 panel.add(sp);
                 panel.updateUI();
-
-                //System.out.println("2d array is "+ Arrays.deepToString(data));
-
 
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -163,8 +159,5 @@ public class GUI extends JFrame implements ActionListener{
             } 
 
         }
-
-
-
     }
 }
