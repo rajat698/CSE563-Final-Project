@@ -16,6 +16,9 @@ public class Roster extends JFileChooser{
     private JFileChooser fileChooser = new JFileChooser();
     JTable table;
     List<Student> students;
+    String[][] returndata;
+    String[] headers;
+
 
     public List<Student> loadRosterData(JTable table) {
 
@@ -79,7 +82,8 @@ public class Roster extends JFileChooser{
 
             data[i] = info;
         }
-
+        headers = columnNames;
+        returndata = data;
         table = new JTable(data, columnNames);
         table.setBounds(30, 40, 200, 300);
      
@@ -88,5 +92,13 @@ public class Roster extends JFileChooser{
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
         return sp;
+    }
+
+    public String[][] getData() {
+        return returndata;
+    }
+
+    public String[] getHeaders() {
+        return headers;
     }
 }

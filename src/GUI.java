@@ -1,4 +1,6 @@
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -11,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedHashMap;
@@ -32,6 +35,8 @@ public class GUI extends JFrame implements ActionListener{
     JTable table = new JTable();
     LinkedHashMap<String, Integer> columnMap = new LinkedHashMap<>();
     Attendance attendance = new Attendance(null);
+    String[][] displayData;
+    String[] headers;
 
     public GUI(){
         loadGUI();
@@ -49,6 +54,7 @@ public class GUI extends JFrame implements ActionListener{
         addAttendance = new JMenuItem("Add Attendance");
         addAttendance.addActionListener(this);
         saveRoster = new JMenuItem("Save");
+        saveRoster.addActionListener(this);
         plotData = new JMenuItem("Plot Data");
 
         file = new JMenu("File");
@@ -125,11 +131,40 @@ public class GUI extends JFrame implements ActionListener{
 
                 Roster roster = new Roster();
                 JScrollPane sp = roster.visualizeRoster(studentRoster, columnNames.length, columnNames, columnMap);
+                String[][] data = roster.getData();
+                displayData = data;
+                String[] h = roster.getHeaders();
+                headers = h;
+                // System.out.println("DATA IS ::::"+data);
                 panel.add(sp);
                 panel.updateUI();
+
+                //System.out.println("2d array is "+ Arrays.deepToString(data));
+
+
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
+        else if(e.getSource() == saveRoster) {
+            if (rosterAdded == false) {
+                JPanel jPanleOBject = new JPanel();   
+                JLabel errorMessage = new JLabel("Error : Load the roster first");
+                jPanleOBject.add(errorMessage);
+                
+                JDialog displayDialog = new JDialog();
+                displayDialog.add(jPanleOBject);
+                displayDialog.setVisible(true);
+                displayDialog.setSize(500, 100);
+                displayDialog.setAlwaysOnTop(true);
+            } else {
+                Save save = new Save();
+                save.saveFile(displayData, headers);
+            } 
+
+        }
+
+
+
     }
 }
