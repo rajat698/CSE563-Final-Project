@@ -142,6 +142,11 @@ public class GUI extends JFrame implements ActionListener{
                 ex.printStackTrace();
             }
         }
+
+        /** 
+         * Saves headers as well as its data in the CSV file.
+         * If roster is not added, it will show error message.
+         */
         else if(e.getSource() == saveRoster) {
             if (rosterAdded == false) {
                 JPanel jPanleOBject = new JPanel();   

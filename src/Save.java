@@ -2,6 +2,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Save {
+
+    /**
+     * @param data contains all the data of the roster
+     * @param headers contains the headers.
+     * Saves headers as well as its data in the CSV file.
+     * All the details will be saved in "SaveAttendance.csv" after save button is clicked.
+     * @return void
+     */
     public void saveFile (String[][] data, String[] headers) {
         try {
             FileWriter fileWriter = new FileWriter("SaveAttendance.csv");
