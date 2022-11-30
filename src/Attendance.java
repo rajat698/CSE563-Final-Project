@@ -9,12 +9,15 @@ import java.util.List;
 import java.util.Map;
 
 public class Attendance extends JFileChooser {
-    private JFileChooser fileChooser = new JFileChooser();
+    private JFileChooser fileChooser;
     private Map<String, Student> studentMap;
     private static Map<String, List<String>> asuriteMissingInRoster;
     private static int columnNum;
 
     public Attendance(List<Student> students) {
+        fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(true);
+
         asuriteMissingInRoster = new HashMap<>();
         if (students != null)
             studentMap = convertListToMap(students);
@@ -29,26 +32,28 @@ public class Attendance extends JFileChooser {
     public void loadAttendanceData(Map<String, Integer> datesMap) throws IOException {
         int result = fileChooser.showOpenDialog(getParent());
         if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            String fileName = selectedFile.getName();
-            String filePath = selectedFile.getAbsolutePath();
+            File[] files = fileChooser.getSelectedFiles();
+            for (File file : files) {
+                String fileName = file.getName();
+                String filePath = file.getAbsolutePath();
 
-            if(!fileName.endsWith(".csv"))
-                throw new IOException("Invalid file format");
+                if (!fileName.endsWith(".csv"))
+                    throw new IOException("Invalid file format");
 
-            if (fileName.length() < 8)
-                throw new IOException("File name invalid for file: "+fileName);
+                if (fileName.length() < 8)
+                    throw new IOException("File name invalid for file: " + fileName);
 
-            String date = convertToDateFmt(fileName.substring(0, 8));
-            if (date == null)
-                throw new IOException("Date format invalid for file: "+fileName);
+                String date = convertToDateFmt(fileName.substring(0, 8));
+                if (date == null)
+                    throw new IOException("Date format invalid for file: " + fileName);
 
-            if (!datesMap.containsKey(date)) {
-                datesMap.put(date, columnNum);
-                columnNum++;
+                if (!datesMap.containsKey(date)) {
+                    datesMap.put(date, columnNum);
+                    columnNum++;
+                }
+
+                loadFileData(filePath, date);
             }
-
-            loadFileData(filePath, date);
         }
     }
 

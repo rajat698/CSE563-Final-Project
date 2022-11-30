@@ -103,10 +103,10 @@ public class GUI extends JFrame implements ActionListener{
                 panel.add(sp);
                 panel.updateUI();
             }
-            else {
-                panel.removeAll(); 
-                panel.updateUI();
-            }
+//            else {
+//                panel.removeAll();
+//                panel.updateUI();
+//            }
         } // Action listener for adding attendance data
         else if(e.getSource() == addAttendance && rosterAdded) {
             try {
