@@ -3,7 +3,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,7 @@ import java.util.Map;
 public class Attendance extends JFileChooser {
     private JFileChooser fileChooser;
     private Map<String, Student> studentMap;
-    private static Map<String, List<String>> asuriteMissingInRoster;
+    private static Map<String, Map<String, Integer>> asuriteMissingInRoster;
     private static int columnNum;
 
     public Attendance(List<Student> students) {
@@ -90,8 +89,10 @@ public class Attendance extends JFileChooser {
                 int time = Integer.parseInt(attendanceData[1]);
 
                 if (!studentMap.containsKey(asurite)) {
-                    asuriteMissingInRoster.putIfAbsent(date, new ArrayList<>());
-                    asuriteMissingInRoster.get(date).add(asurite);
+                    asuriteMissingInRoster.putIfAbsent(date, new HashMap<>());
+                    Map<String, Integer> studentAttendance = asuriteMissingInRoster.get(date);
+                    studentAttendance.put(asurite, studentAttendance.getOrDefault(asurite, 0) + time);
+                    asuriteMissingInRoster.put(date, studentAttendance);
                 } else {
                     Student studentObj = studentMap.get(asurite);
                     Map<String, Integer> dateWiseAttendance = studentObj.getAttendance();
