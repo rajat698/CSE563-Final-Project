@@ -156,8 +156,12 @@ public class GUI extends JFrame implements ActionListener{
                 JDialog displayDialog = new JDialog();
                 displayDialog.add(jPanleOBject);
                 displayDialog.setVisible(true);
+                displayDialog.setTitle("ERROR");
                 displayDialog.setSize(500, 100);
                 displayDialog.setAlwaysOnTop(true);
+                displayDialog.setBackground(getForeground());
+                displayDialog.setName("ERROR WINDOW");
+                displayDialog.setLocation(350, 300);
             } else {
                 Save save = new Save();
                 save.saveFile(displayData, headers);
