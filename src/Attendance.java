@@ -7,12 +7,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This Attendance class consists of functionalities such as uploading one
+ * or more attendance files, parsing the attendance files, and map the attendees
+ * to the previously uploaded roster.
+ */
 public class Attendance extends JFileChooser {
     private JFileChooser fileChooser;
     private Map<String, Student> studentMap;
     private static Map<String, Map<String, Integer>> asuriteMissingInRoster;
     private static int columnNum;
 
+    /**
+     * Default constructor of Attendance
+     * @param students list of Student Objects received from the roster.
+     */
     public Attendance(List<Student> students) {
         fileChooser = new JFileChooser();
         fileChooser.setMultiSelectionEnabled(true);
@@ -24,8 +33,8 @@ public class Attendance extends JFileChooser {
     }
 
     /**
-     *
-     * @return list of all the dates on which attendance was taken
+     * This method is used to upload one or more attendance files and parse them.
+     * @param  datesMap key value pair of date with its corresponding columnNumber
      * @throws IOException
      */
     public void loadAttendanceData(Map<String, Integer> datesMap) throws IOException {
@@ -56,6 +65,11 @@ public class Attendance extends JFileChooser {
         }
     }
 
+    /**
+     * This is a helper method to convert a list of Student object to a hashmap.
+     * @param students list of Student object
+     * @return a key value pair of student's asurite id mapped to Student's object
+     */
     private Map<String, Student> convertListToMap(List<Student> students) {
         Map<String, Student> studentMap = new HashMap<>();
         for (Student student : students)
@@ -63,6 +77,13 @@ public class Attendance extends JFileChooser {
         return studentMap;
     }
 
+    /**
+     * This Attendance class consists of functionalities such as uploading one
+     * or more attendance files, parsing the attendance files, and map the attendees
+     * to the previously uploaded roster.
+     * @param unformattedDate date of the format YYYYMMDD
+     * @return String date of the format MM/DD/YYYY
+     */
     private String convertToDateFmt(String unformattedDate) {
         if (unformattedDate.length() != 8)
             return null;
@@ -77,6 +98,13 @@ public class Attendance extends JFileChooser {
         return month+"/"+day+"/"+year;
     }
 
+    /**
+     * This methods has parses an attendance file, and map the attendees
+     * to the previously uploaded roster. It also stores the students who are
+     * not present in the roster.
+     * @param filePathString path of the file to read
+     * @param date attendance file date
+     */
     private void loadFileData(String filePathString, String date) {
         String line = "";
         String delimiter = ",";
