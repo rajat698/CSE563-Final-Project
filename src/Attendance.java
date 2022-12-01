@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.FlowLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -111,6 +112,7 @@ public class Attendance extends JFileChooser {
 
         try  {
             BufferedReader br = new BufferedReader(new FileReader(filePathString));
+            int count = 0;
             while ((line = br.readLine()) != null) {
                 String[] attendanceData= line.split(delimiter);
                 String asurite = attendanceData[0];
@@ -126,12 +128,71 @@ public class Attendance extends JFileChooser {
                     Map<String, Integer> dateWiseAttendance = studentObj.getAttendance();
                     dateWiseAttendance.put(date, dateWiseAttendance.getOrDefault(date, 0) + time);
                     studentObj.setAttendance(dateWiseAttendance);
+                    count++;
                 }
+            }
+            if (!asuriteMissingInRoster.isEmpty()){
+                displayAttendanceResult(asuriteMissingInRoster,count);
             }
 
             br.close();
         } catch (IOException e)  {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Displays the result of adding the attendance data to the roster. Tells how many students the
+     * data was loaded for, and if additional attendees were found
+     *
+     * @param asuriteMissingInRoster
+     * @param studentsAdded
+     */
+    public void displayAttendanceResult(Map<String, Map<String, Integer>> asuriteMissingInRoster, int studentsAdded) {
+        JFrame frame = new JFrame();
+        JDialog dialog = new JDialog(frame, "Attendance Results");
+        
+        String loadedMessageText = "<html>" + "<br></br>" + "Data loaded for " + studentsAdded + " users in the roster." + "<br></br>";
+        
+        System.out.println(asuriteMissingInRoster);
+        System.out.println(asuriteMissingInRoster.values());
+        System.out.println(asuriteMissingInRoster.values().size());
+        // String additionalMessageText =  "<html>" + asuriteMissingInRoster.values().iterator().next().size()  + " additional attendee(s) was found:<br></br>";
+        
+        JPanel panel = new JPanel();
+        JLabel loadedMessage =
+                new JLabel(loadedMessageText);
+
+        
+        
+        panel.add(loadedMessage);
+
+        String attendeeMessage = "";
+
+        if (!asuriteMissingInRoster.isEmpty()) {
+            for (Map.Entry<String, Map<String, Integer>> e : asuriteMissingInRoster.entrySet()) {
+                attendeeMessage = "<html>" + "<br></br>" +"On " + e.getKey() + ", " + e.getValue().size()  + " additional attendee(s) was found:<br></br>";
+                for (Map.Entry<String,Integer> en : e.getValue().entrySet()){
+                    attendeeMessage = attendeeMessage + en.getKey() + " connected for " + en.getValue() + " minute(s)" + "<br></br>";
+                }
+                JLabel additionalLabel = new JLabel(attendeeMessage);
+                panel.add(additionalLabel);
+            }
+        }
+        
+        
+        //JScrollPane scrollPane = new JScrollPane(panel);
+        dialog.add(new JScrollPane(panel));
+        //scrollPane.setSize(400, 600);
+        
+        //scrollPane.setVisible(true);
+        
+        
+        dialog.setSize(600, 400);
+        //dialog.pack();
+        dialog.setVisible(true);
+        
+        // Repository.additionalStudents.clear();
+        // Repository.studentsAdded = 0;
     }
 }
