@@ -104,7 +104,8 @@ public class GUI extends JFrame implements ActionListener{
         this.add(menuBar);
         this.setJMenuBar(menuBar);
 
-        this.setVisible(true);    
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
     }
         
 
