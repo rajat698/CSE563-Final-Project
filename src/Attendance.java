@@ -187,7 +187,6 @@ public class Attendance extends JFileChooser {
         
         //scrollPane.setVisible(true);
         
-        
         dialog.setSize(600, 400);
         //dialog.pack();
         dialog.setVisible(true);

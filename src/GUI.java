@@ -37,11 +37,27 @@ public class GUI extends JFrame implements ActionListener{
     Attendance attendance = new Attendance(null);
     String[][] displayData;
     String[] headers;
+    boolean drawHello = false;
 
     public GUI(){
         loadGUI();
     }
+    
+    @Override
+    public void paint(Graphics g) {   
+        super.paint(g);
+        if(drawHello) {
+            
+            g.fillRect (160, 100, 10, 200);
+            g.fillRect (260, 200, 10, 100);
 
+            g.drawString("12/24/2022 |",140,320);
+            g.drawString("12/25/2022 |",240,320);
+            g.drawString("40",120,100);
+            g.drawString("50",120,200);
+        }
+    }
+    
     public void loadGUI() {
 
         setTitle("CSE563 Final Project");
@@ -56,6 +72,7 @@ public class GUI extends JFrame implements ActionListener{
         saveRoster = new JMenuItem("Save");
         saveRoster.addActionListener(this);
         plotData = new JMenuItem("Plot Data");
+        plotData.addActionListener(this);
 
         file = new JMenu("File");
         file.add(loadRoster);
@@ -148,6 +165,7 @@ public class GUI extends JFrame implements ActionListener{
          * If roster is not added, it will show error message.
          */
         else if(e.getSource() == saveRoster) {
+            
             if (rosterAdded == false) {
                 JPanel jPanleOBject = new JPanel();   
                 JLabel errorMessage = new JLabel("Error : Load the roster first");
@@ -168,5 +186,14 @@ public class GUI extends JFrame implements ActionListener{
             } 
 
         }
+        // Displays a bar plot for the student attendance data
+
+        else if(e.getSource() == plotData) {
+            panel.removeAll();
+            drawHello = true;
+            System.out.println("Loading");
+            repaint();
+            }
     }
+    
 }

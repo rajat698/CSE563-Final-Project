@@ -10,15 +10,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JFileChooser;
 
-
-public class Roster extends JFileChooser{
+public class Roster extends JFileChooser {
 
     private JFileChooser fileChooser = new JFileChooser();
     JTable table;
     List<Student> students;
     String[][] returndata;
     String[] headers;
-
 
     public List<Student> loadRosterData(JTable table) {
 

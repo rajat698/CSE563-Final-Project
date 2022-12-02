@@ -20,7 +20,7 @@ public class Viewer {
         
         JFrame frame = new JFrame();
         JDialog dialog = new JDialog(frame, "About");
-        JLabel label = new JLabel("Team Members: Rajat Yadav, Abhishek Massetty, Sahil Jambhulkar, Konark, Vinita, Harshita");
+        JLabel label = new JLabel("Team Members: Rajat Yadav, Abhishek Massetty, Sahil Jambhulkar, Konark Bhad, Vinita Maloo, Harshita Jain");
         dialog.add(label);
 
         dialog.setSize(900, 100);
