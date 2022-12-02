@@ -5,7 +5,7 @@ public class PlotData {
     public void PlotData() {}
 
     public Map data() {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
 
         map.put("12/10/2022", "40");
         map.put("12/11/2022", "50");

@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.FlowLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -18,6 +17,7 @@ public class Attendance extends JFileChooser {
     private Map<String, Student> studentMap;
     private static Map<String, Map<String, Integer>> asuriteMissingInRoster;
     private static int columnNum;
+    private Map<String, Integer> datewiseStudents;
 
     /**
      * Default constructor of Attendance
@@ -31,6 +31,15 @@ public class Attendance extends JFileChooser {
         if (students != null)
             studentMap = convertListToMap(students);
         columnNum = 4;
+        datewiseStudents = new HashMap<>();
+    }
+
+    /**
+     * This method is used to return the date-wise count of students who attended the class.
+     * @return Map<String, Integer> datewise count of students, present in roster, that attended the class
+     */
+    public Map<String, Integer> getDatewiseStudents() {
+        return datewiseStudents;
     }
 
     /**
@@ -126,14 +135,18 @@ public class Attendance extends JFileChooser {
                 } else {
                     Student studentObj = studentMap.get(asurite);
                     Map<String, Integer> dateWiseAttendance = studentObj.getAttendance();
+
+                    /** Find date-wise student count*/
+                    if (!dateWiseAttendance.containsKey(date))
+                        datewiseStudents.put(date, datewiseStudents.getOrDefault(date, 0) + 1);
+
                     dateWiseAttendance.put(date, dateWiseAttendance.getOrDefault(date, 0) + time);
                     studentObj.setAttendance(dateWiseAttendance);
                     count++;
                 }
             }
-            if (!asuriteMissingInRoster.isEmpty()){
-                displayAttendanceResult(asuriteMissingInRoster,count);
-            }
+
+            displayAttendanceResult(asuriteMissingInRoster,count);
 
             br.close();
         } catch (IOException e)  {
@@ -143,7 +156,7 @@ public class Attendance extends JFileChooser {
 
     /**
      * Displays the result of adding the attendance data to the roster. Tells how many students the
-     * data was loaded for, and if additional attendees were found
+     * data was loaded for, and if additional attendees were found.
      *
      * @param asuriteMissingInRoster
      * @param studentsAdded
@@ -154,17 +167,15 @@ public class Attendance extends JFileChooser {
         
         String loadedMessageText = "<html>" + "<br></br>" + "Data loaded for " + studentsAdded + " users in the roster." + "<br></br>";
         
-        System.out.println(asuriteMissingInRoster);
-        System.out.println(asuriteMissingInRoster.values());
-        System.out.println(asuriteMissingInRoster.values().size());
+//        System.out.println(asuriteMissingInRoster);
+//        System.out.println(asuriteMissingInRoster.values());
+//        System.out.println(asuriteMissingInRoster.values().size());
         // String additionalMessageText =  "<html>" + asuriteMissingInRoster.values().iterator().next().size()  + " additional attendee(s) was found:<br></br>";
         
         JPanel panel = new JPanel();
         JLabel loadedMessage =
                 new JLabel(loadedMessageText);
 
-        
-        
         panel.add(loadedMessage);
 
         String attendeeMessage = "";
@@ -179,19 +190,9 @@ public class Attendance extends JFileChooser {
                 panel.add(additionalLabel);
             }
         }
-        
-        
-        //JScrollPane scrollPane = new JScrollPane(panel);
+
         dialog.add(new JScrollPane(panel));
-        //scrollPane.setSize(400, 600);
-        
-        //scrollPane.setVisible(true);
-        
         dialog.setSize(600, 400);
-        //dialog.pack();
         dialog.setVisible(true);
-        
-        // Repository.additionalStudents.clear();
-        // Repository.studentsAdded = 0;
     }
 }

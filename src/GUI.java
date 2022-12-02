@@ -38,7 +38,7 @@ public class GUI extends JFrame implements ActionListener{
     Attendance attendance = new Attendance(null);
     String[][] displayData;
     String[] headers;
-    boolean drawHello = false;
+    boolean drawPlot = false;
 
     public GUI(){
         loadGUI();
@@ -47,7 +47,7 @@ public class GUI extends JFrame implements ActionListener{
     @Override
     public void paint(Graphics g) {   
         super.paint(g);
-        if(drawHello) {
+        if(drawPlot) {
 
             PlotData plotData = new PlotData();
             Iterator Iterator = plotData.data().entrySet().iterator();
@@ -169,7 +169,6 @@ public class GUI extends JFrame implements ActionListener{
                 headers = h;
                 panel.add(sp);
                 panel.updateUI();
-
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -204,9 +203,9 @@ public class GUI extends JFrame implements ActionListener{
         // Displays a bar plot for the student attendance data
         else if(e.getSource() == plotData) {
             panel.removeAll();
-            drawHello = true;
+            drawPlot = true;
             repaint();
-            }
+        }
     }
     
 }
