@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.awt.*;
@@ -47,14 +48,27 @@ public class GUI extends JFrame implements ActionListener{
     public void paint(Graphics g) {   
         super.paint(g);
         if(drawHello) {
-            
-            g.fillRect (160, 100, 10, 200);
-            g.fillRect (260, 200, 10, 100);
 
-            g.drawString("12/24/2022 |",140,320);
-            g.drawString("12/25/2022 |",240,320);
-            g.drawString("40",120,100);
-            g.drawString("50",120,200);
+            PlotData plotData = new PlotData();
+            Iterator Iterator = plotData.data().entrySet().iterator();
+
+            int x = 140;
+            int y = 300;
+            while (Iterator.hasNext()) {
+
+                Map.Entry mapElement = (Map.Entry)Iterator.next();
+
+                int height = Integer.parseInt((String) mapElement.getValue());
+                g.fillRect (x + 30, 500 - height * 2, 30, height * 2);
+
+                g.drawString((String)(mapElement.getKey()), x, 520);
+                g.drawString((String)(mapElement.getValue()),120, 507 - height * 2);
+
+                x = x + 100;
+                y = y - height;
+
+            }
+
         }
     }
     
@@ -187,11 +201,9 @@ public class GUI extends JFrame implements ActionListener{
 
         }
         // Displays a bar plot for the student attendance data
-
         else if(e.getSource() == plotData) {
             panel.removeAll();
             drawHello = true;
-            System.out.println("Loading");
             repaint();
             }
     }
