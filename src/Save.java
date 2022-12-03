@@ -27,7 +27,11 @@ public class Save {
 
             for (int i = 0; i < data.length; i++) {
                 for (int j = 0; j < data[i].length - 1; j++) {
-                    fileWriter.append(data[i][j]);
+                    String val = "0";
+                    if (data[i][j] != null)
+                        val = data[i][j];
+
+                    fileWriter.append(val);
                     fileWriter.append(",");
                 }
                 fileWriter.append(data[i][data[i].length - 1]);

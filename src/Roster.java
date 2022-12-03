@@ -99,9 +99,13 @@ public class Roster extends JFileChooser {
             info[2] = studentObj.getLastName();
             info[3] = studentObj.getASURITE();
 
-            for (Map.Entry<String, Integer> entry : studentObj.getAttendance().entrySet()) {
-                int columnNum = columnMap.get(entry.getKey());
-                info[columnNum] = String.valueOf(entry.getValue());
+            Map<String, Integer> entry = studentObj.getAttendance();
+            for (Map.Entry<String, Integer> columns : columnMap.entrySet()) {
+                int columnNum = columns.getValue();
+                if (entry.containsKey(columns.getKey()))
+                    info[columnNum] = String.valueOf(entry.get(columns.getKey()));
+                else
+                    info[columnNum] = String.valueOf(0);
             }
 
             data[i] = info;

@@ -1,11 +1,12 @@
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -17,7 +18,6 @@ public class Attendance extends JFileChooser {
     private JFileChooser fileChooser;
     private Map<String, Student> studentMap;
     private static Map<String, Map<String, Integer>> asuriteMissingInRoster;
-    private static List<String> asuritePresntInRoster;
     private static int columnNum;
     private Map<String, Integer> datewiseStudents;
 
@@ -30,7 +30,6 @@ public class Attendance extends JFileChooser {
         fileChooser.setMultiSelectionEnabled(true);
 
         asuriteMissingInRoster = new HashMap<>();
-        asuritePresntInRoster = new ArrayList<>();
         if (students != null)
             studentMap = convertListToMap(students);
         columnNum = 4;
@@ -75,9 +74,8 @@ public class Attendance extends JFileChooser {
 
                 loadFileData(filePath, date);
             }
-            displayAttendanceResult(asuriteMissingInRoster,asuritePresntInRoster.size());
+            displayAttendanceResult(asuriteMissingInRoster);
             asuriteMissingInRoster = new HashMap<>();
-            asuritePresntInRoster = new ArrayList<>();
         }
     }
 
@@ -146,12 +144,6 @@ public class Attendance extends JFileChooser {
 
                     dateWiseAttendance.put(date, dateWiseAttendance.getOrDefault(date, 0) + time);
                     studentObj.setAttendance(dateWiseAttendance);
-                    System.out.println(asurite);
-                    if(!asuritePresntInRoster.contains(asurite)){
-                        System.out.println("NEW ID");
-                        System.out.println(asurite);
-                        asuritePresntInRoster.add(asurite);
-                    }
                 }
             }
             br.close();
@@ -165,32 +157,58 @@ public class Attendance extends JFileChooser {
      * data was loaded for, and if additional attendees were found.
      *
      * @param asuriteMissingInRoster
-     * @param studentsAdded
      */
-    public void displayAttendanceResult(Map<String, Map<String, Integer>> asuriteMissingInRoster, int studentsAdded) {
-        JFrame frame = new JFrame();
-        JDialog dialog = new JDialog(frame, "Attendance Results");
-        
-        String loadedStudentsMessageText = "<html>" + "<br></br>" + "Data loaded for " + studentsAdded + " users in the roster." + "<br></br>";
-         
-        JPanel panel = new JPanel();
-        JLabel loadedMessage =
-                new JLabel(loadedStudentsMessageText);     
-        panel.add(loadedMessage);
+    public void displayAttendanceResult(Map<String, Map<String, Integer>> asuriteMissingInRoster) {
+        JDialog dialog = new JDialog(new JFrame(), "Attendance Results");
 
-        String displayMissingStudentsMessage = "";
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(0, 1));
+        JScrollPane pane = new JScrollPane(panel);
+        pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
         if (!asuriteMissingInRoster.isEmpty()) {
             for (Map.Entry<String, Map<String, Integer>> e : asuriteMissingInRoster.entrySet()) {
-                displayMissingStudentsMessage = "<html>" + "<br></br>" +"On " + e.getKey() + ", " + e.getValue().size()  + " additional attendee(s) were found:<br></br>";
-                for (Map.Entry<String,Integer> en : e.getValue().entrySet()){
-                    displayMissingStudentsMessage = displayMissingStudentsMessage + en.getKey() + " connected for " + en.getValue() + " minute(s)" + "<br></br>";
-                }
-                JLabel additionalLabelText = new JLabel(displayMissingStudentsMessage);
-                panel.add(additionalLabelText);
+                if (e.getValue().size()  == 0)
+                    continue;
+
+                int num = 0;
+                if (datewiseStudents.get(e.getKey()) != null)
+                    num = datewiseStudents.get(e.getKey());
+
+                JLabel label = new JLabel("On " + e.getKey() +
+                        ", data loaded for "+num+" students",
+                        SwingConstants.CENTER);
+                panel.add(label);
+                panel.add(new JLabel(e.getValue().size() + " additional attendee(s) were found:", SwingConstants.CENTER));
+                JTable table = addTable(e.getValue());
+                JTableHeader header = table.getTableHeader();
+                header.setSize(panel.getWidth(), 15);
+                header.setBackground(Color.white);
+                panel.add(header);
+                panel.add(table);
             }
         }
-        dialog.add(new JScrollPane(panel));
+
+        dialog.add(pane);
+        dialog.setLocationRelativeTo(null);
         dialog.setSize(600, 400);
         dialog.setVisible(true);
+    }
+
+
+    private JTable addTable(Map<String, Integer> asuriteMissingInRoster) {
+        String[] columnNames = new String[]{"Asurite Id", "Time Joined"};
+        String[][] data = new String[asuriteMissingInRoster.size()][columnNames.length];
+        int i = 0;
+        for(Map.Entry<String, Integer> entry : asuriteMissingInRoster.entrySet()) {
+            String[] info = new String[2];
+            info[0] = entry.getKey();
+            info[1] = String.valueOf(entry.getValue());
+            data[i++] = info;
+        }
+
+        JTable table = new JTable(data, columnNames);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        return table;
     }
 }
