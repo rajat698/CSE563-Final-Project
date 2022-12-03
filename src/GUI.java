@@ -47,24 +47,31 @@ public class GUI extends JFrame implements ActionListener{
         super.paint(g);
         if(drawPlot) {
 
-            PlotData plotData = new PlotData();
-            Iterator Iterator = plotData.data().entrySet().iterator();
+            Iterator Iterator = attendance.getDatewiseStudents().entrySet().iterator();
+            
+            System.out.println(attendance.getDatewiseStudents());
 
-            int x = 140;
-            int y = 300;
-            while (Iterator.hasNext()) {
+            if (attendance.getDatewiseStudents().entrySet().size() != 0) {
+                int x = 140;
+                int y = 300;
+                while (Iterator.hasNext()) {
 
-                Map.Entry mapElement = (Map.Entry)Iterator.next();
+                    Map.Entry mapElement = (Map.Entry)Iterator.next();
 
-                int height = Integer.parseInt((String) mapElement.getValue());
-                g.fillRect (x + 30, 500 - height * 2, 30, height * 2);
+                    int height = (int) mapElement.getValue();
 
-                g.drawString((String)(mapElement.getKey()), x, 520);
-                g.drawString((String)(mapElement.getValue()),120, 507 - height * 2);
+                    g.fillRect (x + 30, 500 - height * 2, 30, height * 2);
 
-                x = x + 100;
-                y = y - height;
+                    g.drawString((String)(mapElement.getKey()), x, 520);
+                    g.drawString(Integer.toString((int)mapElement.getValue()),120, 507 - height * 2);
 
+                    x = x + 100;
+                    y = y - height;
+
+            }
+        }
+            else {
+                g.drawString("Please add attndance first", 100, 200);
             }
 
         }
@@ -117,6 +124,7 @@ public class GUI extends JFrame implements ActionListener{
             Roster roster = new Roster();
             studentRoster = roster.loadRosterData(table);
             if(studentRoster != null) {
+                
                 rosterAdded = true;
                 panel.removeAll();
                 panel.setLayout(new BorderLayout());
