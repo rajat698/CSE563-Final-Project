@@ -89,6 +89,8 @@ public class Roster extends JFileChooser {
     */
     public JScrollPane visualizeRoster(List<Student> students, int numCol, String[] columnNames,
                                        Map<String, Integer> columnMap) {
+        if (students == null)
+            return null;
         String[][] data = new String[students.size()][numCol];
 
         for(int i= 0;i < students.size(); ++i) {

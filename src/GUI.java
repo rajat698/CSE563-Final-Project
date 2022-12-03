@@ -140,7 +140,7 @@ public class GUI extends JFrame implements ActionListener{
             Roster roster = new Roster();
             studentRoster = roster.loadRosterData(table);
             if(studentRoster != null) {
-                
+                columnMap.clear();
                 rosterAdded = true;
                 panel.removeAll();
                 panel.setLayout(new BorderLayout());
