@@ -48,6 +48,11 @@ public class GUI extends JFrame implements ActionListener{
         loadGUI();
     }
     
+    /**
+     * This method draws the bar plot of attendance.
+     * @param g object for Graphics class of java.awt.Graphics
+     */
+
     @Override
     public void paint(Graphics g) {   
         super.paint(g);
@@ -82,6 +87,9 @@ public class GUI extends JFrame implements ActionListener{
 
         }
     }
+    /**
+     * Method to draw a base UI consisting of menu bar and its items
+     */
     
     public void loadGUI() {
 
@@ -137,7 +145,10 @@ public class GUI extends JFrame implements ActionListener{
         });
     }
         
-
+    /**
+     * This method controls the menu items and their respective functionalities.
+     * @param e Object to control action performed by the menu items
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == about) {
