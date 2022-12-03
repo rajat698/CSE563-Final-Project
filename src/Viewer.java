@@ -1,14 +1,7 @@
 import java.awt.Container;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.*;
 import javax.swing.JLabel;
 import java.awt.*;
-import javax.swing.JPanel;
 import javax.swing.JDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,13 +10,26 @@ public class Viewer {
 
 
     public static void aboutDialogBox() {
-        
-        JFrame frame = new JFrame();
-        JDialog dialog = new JDialog(frame, "About");
-        JLabel label = new JLabel("Team Members: Rajat Yadav, Abhishek Massetty, Sahil Jambhulkar, Konark, Vinita, Harshita");
-        dialog.add(label);
+        JDialog dialogBox = new JDialog(new JFrame(), "About");
 
-        dialog.setSize(900, 100);
-        dialog.setVisible(true);
+        JLabel label1 = new JLabel("Rajat Yadav", SwingConstants.CENTER);
+        JLabel label2 = new JLabel("Abhishek Massetty", SwingConstants.CENTER);
+        JLabel label3 = new JLabel("Sahil Jambhulkar", SwingConstants.CENTER);
+        JLabel label4 = new JLabel("Konark Bhad", SwingConstants.CENTER);
+        JLabel label5 = new JLabel("Vinita Maloo", SwingConstants.CENTER);
+        JLabel label6 = new JLabel("Harshita Jain", SwingConstants.CENTER);
+
+
+        dialogBox.add(label1);
+        dialogBox.add(label2);
+        dialogBox.add(label3);
+        dialogBox.add(label4);
+        dialogBox.add(label5);
+        dialogBox.add(label6);
+
+        dialogBox.setLayout(new GridLayout(2,3));
+        dialogBox.setLocationRelativeTo(null);
+        dialogBox.setSize(900, 200);
+        dialogBox.setVisible(true);
     }
 }
