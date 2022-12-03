@@ -196,6 +196,10 @@ public class Attendance extends JFileChooser {
     }
 
 
+    /**
+     * This method holds logic to create JTable with Students asurite id and time of meeting.
+     * @param asuriteMissingInRoster key value pair of students' asurite id and time of meeting
+    */
     private JTable addTable(Map<String, Integer> asuriteMissingInRoster) {
         String[] columnNames = new String[]{"Asurite Id", "Time Joined"};
         String[][] data = new String[asuriteMissingInRoster.size()][columnNames.length];
