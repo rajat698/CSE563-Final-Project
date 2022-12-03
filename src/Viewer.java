@@ -3,9 +3,16 @@ import javax.swing.JLabel;
 import java.awt.*;
 import javax.swing.JDialog;
 
+/**
+* This Viewer class consists of dialog box for team
+* information.
+*/
 public class Viewer {
 
-
+    /**
+    * This method displays a dialog box consisting of team
+    * information.
+    */
     public static void aboutDialogBox() {
         JDialog dialogBox = new JDialog(new JFrame(), "About");
 
@@ -26,7 +33,8 @@ public class Viewer {
 
         dialogBox.setLayout(new GridLayout(2,3));
         dialogBox.setLocationRelativeTo(null);
-        dialogBox.setSize(900, 200);
+        dialogBox.setSize(600, 200);
         dialogBox.setVisible(true);
+        dialogBox.setAlwaysOnTop(true);
     }
 }

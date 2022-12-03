@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +21,10 @@ import java.util.LinkedHashMap;
 import java.awt.*;
 import java.util.Map;
 
+/**
+* This GUI class loads the graphical user interface for the
+user. It consists of Menu bar, Menu Items and action listeners.
+*/
 public class GUI extends JFrame implements ActionListener{
 
     JMenuBar menuBar;
@@ -27,7 +33,7 @@ public class GUI extends JFrame implements ActionListener{
     JMenuItem saveRoster;
     JMenuItem plotData;
     JMenu file;
-    JMenuItem about;
+    JMenu about;
     boolean rosterAdded = false;
     List<Student> studentRoster = new ArrayList<>();
     JPanel panel = new JPanel();
@@ -99,8 +105,9 @@ public class GUI extends JFrame implements ActionListener{
         file.add(saveRoster);
         file.add(plotData);
 
-        about = new JMenuItem("About");
-        about.addActionListener(this);
+        about = new JMenu("About");
+        //about.addActionListener(this);
+
         menuBar = new JMenuBar();
         
         menuBar.add(file);
@@ -111,6 +118,23 @@ public class GUI extends JFrame implements ActionListener{
 
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+
+        about.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                Viewer.aboutDialogBox();
+            }
+            @Override
+            public void menuDeselected(MenuEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+            @Override
+            public void menuCanceled(MenuEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+        });
     }
         
 
@@ -138,10 +162,6 @@ public class GUI extends JFrame implements ActionListener{
                 panel.add(sp);
                 panel.updateUI();
             }
-//            else {
-//                panel.removeAll();
-//                panel.updateUI();
-//            }
         } // Action listener for adding attendance data
         else if(e.getSource() == addAttendance && rosterAdded) {
             try {

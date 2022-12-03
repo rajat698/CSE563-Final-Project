@@ -1,6 +1,10 @@
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+* This Save class consists of methods to save the attendance
+* file.
+*/
 public class Save {
 
     /**
