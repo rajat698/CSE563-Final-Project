@@ -1,10 +1,7 @@
-import java.awt.Container;
 import javax.swing.*;
 import javax.swing.JLabel;
 import java.awt.*;
 import javax.swing.JDialog;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Viewer {
 

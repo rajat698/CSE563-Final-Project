@@ -1,5 +1,9 @@
 # CSE563-Final-Project
 
+# Load Roster
+
+This option can be used to upload one roster file at a time. The file needs to be in CSV format. After clicking on the Load Roster option, a File Chooser dialog box will appear. Select a csv file to upload. The csv file should be without headers. The selected file will be displayed on the screen in a tabular forma
+
 # Save Attendance
 
 Creates a CSV file in the root folder from the current roster and attendance information so that it can be used at a later time. It is saved with the file name "SaveAttendance.csv"

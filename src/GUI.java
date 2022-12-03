@@ -13,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedHashMap;
@@ -122,9 +120,6 @@ public class GUI extends JFrame implements ActionListener{
                 rosterAdded = true;
                 panel.removeAll();
                 panel.setLayout(new BorderLayout());
-                Dimension screen = new Dimension();
-                screen.setSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth(), Toolkit.getDefaultToolkit().getScreenSize().getHeight());
-                panel.setSize(screen);
                 panel.setBorder(LineBorder.createBlackLineBorder());   
                 add(panel);
 
@@ -146,9 +141,6 @@ public class GUI extends JFrame implements ActionListener{
 
                 panel.removeAll();
                 panel.setLayout(new BorderLayout());
-                Dimension screen = new Dimension();
-                screen.setSize(Toolkit.getDefaultToolkit().getScreenSize().getWidth(), Toolkit.getDefaultToolkit().getScreenSize().getHeight());
-                panel.setSize(screen);
                 panel.setBorder(LineBorder.createBlackLineBorder());
                 add(panel);
 
